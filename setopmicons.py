@@ -53,8 +53,8 @@ def findAnIcon(iconName, item, themeObject):
         
     #If the path is empty, ask what to do
     while not iconInfoObject:
-        print "Sorry pal. It was not possible to find the icon for %s" % (iconName)
-        print "Want to try another icon name? (y/N)" 
+        print "Sorry, it was not possible to find the icon with the %s" % (iconName)
+        print "Want to try another name? (y/N)" 
         answer = str(raw_input())
         if answer == 'y':
 
