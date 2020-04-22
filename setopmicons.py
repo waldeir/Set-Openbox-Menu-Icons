@@ -58,15 +58,18 @@ def findAnIcon(iconName, item, themeObject):
     while not iconInfoObject:
         print ("Sorry, it was not possible to find the icon with the name", iconName)
         answer = input("Want to try another name? (y/N)\n")
-        if answer == 'y':
+        if answer.lower() == 'y' or answer.lower() == 'yes':
 
             print ("Enter the new iconName:")
             iconName = str(raw_input())
             if ' ' in iconName:
                 iconName = removeSpaces(iconName)
-        else:
+        elif answer.lower() == "n" or answer.lower() == "no" or answer == '':
             pathToIcon = ''
             return pathToIcon
+        else:
+            print("The option", answer, "is invalid\n")
+            continue
                 #Create an object with the iformation of the looked icon.
         iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
                 Gtk.ICON_LOOKUP_FORCE_SVG)
