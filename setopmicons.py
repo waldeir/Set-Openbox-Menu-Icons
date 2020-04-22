@@ -6,6 +6,7 @@ from gi.repository import Gtk
 import xml.etree.ElementTree as ET
 
 import argparse
+import os
 
 
 #Declaring namespaces before load the file to avoid the print of "ns0" space
@@ -17,8 +18,8 @@ ICONSIZE = 32
 
 themeObject = Gtk.IconTheme.get_default() #Getting the current theme to extract
 #the icons path
-
-tree = ET.parse('/home/terminator/.config/openbox/menu.xml') #The menu file target
+menupath = os.path.expanduser('~/.config/openbox/menu.xml')
+tree = ET.parse(menupath) #The menu file target
 root = tree.getroot()
 
 
