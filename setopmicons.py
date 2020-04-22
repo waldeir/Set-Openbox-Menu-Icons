@@ -3,8 +3,10 @@
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
-
 import xml.etree.ElementTree as ET
+
+import argparse
+
 
 #Declaring namespaces before load the file to avoid the print of "ns0" space
 ET.register_namespace('', "http://openbox.org/")
@@ -19,6 +21,9 @@ themeObject = Gtk.IconTheme.get_default() #Getting the current theme to extract
 tree = ET.parse('/home/terminator/.config/openbox/menu.xml') #The menu file target
 root = tree.getroot()
 
+
+parser = argparse.ArgumentParser(description='It sets icons to the openbox menu.')
+args = parser.parse_args()
 
 def findAnIcon(iconName, item, themeObject):
     if ' ' in iconName:
