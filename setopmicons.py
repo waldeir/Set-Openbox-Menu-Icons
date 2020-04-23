@@ -56,7 +56,7 @@ def findAnIcon(iconName, item, themeObject):
         
     #If the path is empty, ask what to do
     while not iconInfoObject:
-        print ("Atention: Icon \"", iconName, "\" was not found.", sep='')
+        print ("Atention: Icon \"", iconName, "\" was not found.", sep = '')
         answer = input("You want to try another name? (y/N) ")
         if answer.lower() == 'y' or answer.lower() == 'yes':
 
@@ -70,7 +70,7 @@ def findAnIcon(iconName, item, themeObject):
             print("")
             return pathToIcon
         else:
-            print("The option \"", answer, "\" is invalid\n", sep='')
+            print("The option \"", answer, "\" is invalid\n", sep = '')
             continue
                 #Create an object with the iformation of the looked icon.
         iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
