@@ -26,49 +26,73 @@ root = tree.getroot()
 parser = argparse.ArgumentParser(description='It sets icons to the openbox menu.')
 args = parser.parse_args()
 
-def findAnIcon(iconName, item, themeObject):
-    if ' ' in iconName:
-       #verify if the current theme has an icon with the previous theme icon name
-       iconOldPath = item.get('icon')
-       if iconOldPath:
-           iconName = iconOldPath.split('/')[-1]
-           iconName = iconName.split('.')[0] #discharting the extension
-           iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
-                Gtk.IconLookupFlags.FORCE_SVG)
+def iconByOldName(item, themeObject, ICONSIZE = 32):
+    """verify if the current theme has an icon with the previous theme icon name"""
+    iconOldPath = item.get('icon')
+    if iconOldPath:
+        iconName = iconOldPath.split('/')[-1]
+        iconName = iconName.split('.')[0] #discharting the extension
+        iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
+        Gtk.IconLookupFlags.FORCE_SVG)
 
+        if not iconInfoObject:
+            return ''
+
+        else:
+            pathToIcon = iconInfoObject.get_filename()
+            return pathToIcon
+
+    else:
+        return ''
+
+def iconByLabel(item, themeObject, ICONSIZE = 32):
+    """Fetch a icon path by item label"""
+
+    #trying to find the icon using its label
+    label = item.get('label')
+    label = label.replace(' ','-')
+    iconInfoObject = themeObject.lookup_icon(label, ICONSIZE,
+            Gtk.IconLookupFlags.FORCE_SVG)
+    if iconInfoObject:
+        pathToIcon = iconInfoObject.get_filename()
+        return pathToIcon
+
+    #trying find the icon using its label in lowercase
+    label = label.lower()
+    iconInfoObject = themeObject.lookup_icon(label, ICONSIZE,
+            Gtk.IconLookupFlags.FORCE_SVG)
+    if iconInfoObject:
+        pathToIcon = iconInfoObject.get_filename()
+        return pathToIcon
+
+    else:
+        return ''
+
+
+def iconByName(iconName, themeObject, ICONSIZE = 32):
+    """Fetch a icon path by its name"""
 
     #Create an object with the iformation of the icon found
     iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
                 Gtk.IconLookupFlags.FORCE_SVG)
 
-
-    if not iconInfoObject:
-        #trying to find the icon using its label
-        label = item.get('label')
-        iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
-                Gtk.IconLookupFlags.FORCE_SVG)
-    if not iconInfoObject:
-        #trying find the icon using its label in lowercase
-        label = label.lower()
-        iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
-                Gtk.IconLookupFlags.FORCE_SVG)
-
-        
     #If the path is empty, ask what to do
     while not iconInfoObject:
         print ("Atention: Icon \"", iconName, "\" was not found.", sep = '')
         answer = input("You want to try another name? (y/N) ")
         if answer.lower() == 'y' or answer.lower() == 'yes':
-
             print("Enter the new iconName:")
             iconName = input("iconName = ")
             print("")
+
             if ' ' in iconName:
-                iconName = removeSpaces(iconName)
+                iconName = removeSpaceWarning(iconName)
+
         elif answer.lower() == "n" or answer.lower() == "no" or answer == '':
             pathToIcon = ''
             print("")
             return pathToIcon
+
         else:
             print("The option \"", answer, "\" is invalid\n", sep = '')
             continue
@@ -80,8 +104,30 @@ def findAnIcon(iconName, item, themeObject):
 
     return pathToIcon
 
-def removeSpaces(iconName):
-    #the string to search must not contain any spaces characters
+def findAnIcon(item, themeObject, ICONSIZE=32):
+
+    """Fretch a icon path using different methods"""
+    pathToIcon = iconByOldName(item, themeObject, ICONSIZE)
+    if pathToIcon:
+        return pathToIcon
+
+    pathToIcon = iconByLabel(item, themeObject, ICONSIZE)
+    if pathToIcon:
+        return pathToIcon
+
+    #Find by the command
+    action = item[0]
+    execute = action[0]
+    iconToFind = execute.text
+    pathToIcon = iconByName(iconToFind, themeObject, ICONSIZE)
+    if pathToIcon:
+        return pathToIcon
+    else:
+        return ''
+
+
+def removeSpacesWarning(iconName):
+    """If the user types a iconName with spaces, show an error"""
     while ' ' in iconName:
         print("The \"", iconName, "\" string contains an space", sep = '')
         iconName = input("Enter a valid icon name\niconName = ")
