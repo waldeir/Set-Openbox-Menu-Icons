@@ -79,7 +79,7 @@ def iconByName(iconName, themeObject, ICONSIZE = 32):
     #If the path is empty, ask what to do
     while not iconInfoObject:
         print ("Atention: Icon \"", iconName, "\" was not found.", sep = '')
-        answer = input("You want to try another name? (y/N) ")
+        answer = input("Do you want to try another name? (y/N) ")
         if answer.lower() == 'y' or answer.lower() == 'yes':
             print("Enter the new iconName:")
             iconName = input("iconName = ")
