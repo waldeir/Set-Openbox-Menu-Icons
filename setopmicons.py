@@ -135,27 +135,63 @@ def removeSpacesWarning(iconName):
 
     return iconName
 
-#it will work only for menus with no more than one degree of recursion
-for element in root:# Iterate over the root menu elements
-    #Skip the root menu constructor
-    if element.get("id") == "root-menu":
-        continue
-    for item in element: #Try to find an icon for each menu item
-        #If the tag is a sepatator just skip. We just need tags that indecate menu
-        #items
+#for element in root:# Iterate over the root menu elements
+#    #Skip the root menu constructor
+#    #if element.get("id") == "root-menu":
+#    #    continue
+#    for item in element: #Try to find an icon for each menu item
+#        #If the tag is a sepatator just skip. We just need tags that indecate menu
+#        #items
+#        if item.tag == '{http://openbox.org/}separator':
+#            continue
+#        #Each item is associated to only an action, which is stored at position
+#        #"0"
+#        action = item[0]
+#        if action.get('name') != "Execute":
+#            continue
+#        execute = action[0]
+#        iconToFind = execute.text#Get the command name string.
+#
+#        pathToIcon = findAnIcon(iconToFind, themeObject, ICONSIZE)
+#        if not pathToIcon:
+#            continue
+#        item.set('icon', pathToIcon)
+#tree.write('/home/terminator/.config/openbox/menu.xml')
+
+def iterateRecursively(xmlEtreeElement):
+    """Iterate through the menu elements recursively and try to find their icons."""
+
+    element = xmlEtreeElement
+
+    for item in element:
+
         if item.tag == '{http://openbox.org/}separator':
             continue
-        #Each item is associated to only an action, which is stored at position
-        #"0"
-        action = item[0]
-        if action.get('name') != "Execute":
-            continue
-        execute = action[0]
-        iconToFind = execute.text#Get the command name string.
 
-        pathToIcon = findAnIcon(iconToFind, item, themeObject)
-        if not pathToIcon:
-            continue
-        item.set('icon', pathToIcon)
-        tree.write('/home/terminator/.config/openbox/menu.xml')
+        elif item.tag == '{http://openbox.org/}menu':
 
+            iterateRecursively(item)
+
+        elif item.tag == '{http://openbox.org/}item':
+            action = item[0]
+
+            if action.get('name') == "Execute":
+                pathToIcon = findAnIcon(item, themeObject, ICONSIZE)
+
+                 
+                if not pathToIcon:
+
+                    print("The path to Icon \'",pathToIcon, "\'", sep='')
+                    print("\nSorry, not today\n")
+                    continue
+
+                else:
+                    item.set('icon', pathToIcon)
+
+        else:
+            print("Can't recognize the item.tag = \'", item.tag, "\'", sep = '')
+
+for element in root:
+    iterateRecursively(element)
+
+tree.write('/home/terminator/.config/openbox/menu.xml')
