@@ -114,6 +114,20 @@ def findAnIcon(item, themeObject, ICONSIZE=32):
     if pathToIcon:
         return pathToIcon
 
+    if item.tag == '{http://openbox.org/}menu':
+        pathToIcon = iconByName(item.get('id'), themeObject, ICONSIZE)
+        return pathToIcon 
+
+    if item[0].get('name').lower() in [ 'reconfigure','restart']:
+        pathToIcon = iconByName('view-refresh', themeObject, ICONSIZE)
+        return pathToIcon
+
+    if item[0].get('name').lower() == 'exit':
+        pathToIcon = iconByName('exit', themeObject, ICONSIZE)
+        return pathToIcon
+
+
+
     #Find by the command
     action = item[0]
     execute = action[0]
@@ -146,24 +160,21 @@ def iterateRecursively(xmlEtreeElement):
             continue
 
         elif item.tag == '{http://openbox.org/}menu':
-
+            pathToIcon = findAnIcon(item, themeObject, ICONSIZE)
             iterateRecursively(item)
+            if not pathToIcon:
+                continue
+            else:
+                item.set('icon', pathToIcon)
 
         elif item.tag == '{http://openbox.org/}item':
-            action = item[0]
+            pathToIcon = findAnIcon(item, themeObject, ICONSIZE)
 
-            if action.get('name') == "Execute":
-                pathToIcon = findAnIcon(item, themeObject, ICONSIZE)
+            if not pathToIcon:
+                continue
 
-                 
-                if not pathToIcon:
-
-                    print("The path to Icon \'",pathToIcon, "\'", sep='')
-                    print("\nSorry, not today\n")
-                    continue
-
-                else:
-                    item.set('icon', pathToIcon)
+            else:
+                item.set('icon', pathToIcon)
 
         else:
             print("Can't recognize the item.tag = \'", item.tag, "\'", sep = '')
