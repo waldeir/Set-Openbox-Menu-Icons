@@ -30,15 +30,16 @@ def findAnIcon(iconName, item, themeObject):
     if ' ' in iconName:
        #verify if the current theme has an icon with the previous theme icon name
        iconOldPath = item.get('icon')
-       iconName = iconOldPath.split('/')[-1]
-       iconName = iconName.split('.')[0] #discharting the extension
-       iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
+       if iconOldPath:
+           iconName = iconOldPath.split('/')[-1]
+           iconName = iconName.split('.')[0] #discharting the extension
+           iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
                 Gtk.IconLookupFlags.FORCE_SVG)
 
 
     #Create an object with the iformation of the icon found
     iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
-            Gtk.IconLookupFlags.FORCE_SVG)
+                Gtk.IconLookupFlags.FORCE_SVG)
 
 
     if not iconInfoObject:
