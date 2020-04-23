@@ -13,7 +13,7 @@ import os
 ET.register_namespace('', "http://openbox.org/")
 ET.register_namespace('xsi', "http://www.w3.org/2001/XMLSchema-instance")
 
-ICONSIZE = 32
+ICONSIZE = 48
 
 
 themeObject = Gtk.IconTheme.get_default() #Getting the current theme to extract
