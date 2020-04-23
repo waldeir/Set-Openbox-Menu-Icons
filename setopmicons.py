@@ -83,8 +83,9 @@ def findAnIcon(iconName, item, themeObject):
 def removeSpaces(iconName):
     #the string to search must not contain any spaces characters
     while ' ' in iconName:
-        print("The iconName =", iconName, "string contains an space")
-        iconName = input("Enter a valid icon name\n")
+        print("The \"", iconName, "\" string contains an space", sep = '')
+        iconName = input("Enter a valid icon name\niconName = ")
+        print("")
 
     return iconName
 
