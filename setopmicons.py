@@ -8,8 +8,24 @@ import xml.etree.ElementTree as ET
 import argparse
 import os
 
+from xdg.DesktopEntry import DesktopEntry
 
-#Declaring namespaces before load the file to avoid the print of "ns0" space
+# Generation dictionary with executable names and their freedesktop.org .desktop objects 
+
+dotDesktopFiles = os.listdir('/usr/share/applications/')
+
+dictionaryDesktop = {}
+
+for archive in dotDesktopFiles:
+    if archive.split('.')[-1] != 'desktop' : # Exclude non .desktop files
+        continue
+    dotDesktopObject = DesktopEntry()
+    dotDesktopObject.parse('/usr/share/applications/' + archive)
+    executable = dotDesktopObject.getExec().split(' ')[0]
+    dictionaryDesktop[executable] = dotDesktopObject
+
+
+# Declaring namespaces before load the file to avoid the print of "ns0" space
 ET.register_namespace('', "http://openbox.org/")
 ET.register_namespace('xsi', "http://www.w3.org/2001/XMLSchema-instance")
 
@@ -133,12 +149,23 @@ def findAnIcon(item, themeObject, ICONSIZE=32):
     if item[0].get('name').lower() == 'exit':
         pathToIcon = iconByName('exit', themeObject, ICONSIZE)
         return pathToIcon
-
-
-
-    #Find by the command
+    
+    # Find by .desktop file parsing
     action = item[0]
     execute = action[0]
+
+
+    pathToIcon = ''
+    if execute.text in dictionaryDesktop.keys():
+        dotDesktop = dictionaryDesktop[execute.text]
+        iconToFind = dotDesktop.getIcon()
+        pathToIcon = iconByName(iconToFind, themeObject, ICONSIZE, QUESTION = True)
+
+    if pathToIcon:
+        return pathToIcon
+
+
+    # Find by the command
     iconToFind = execute.text
     pathToIcon = iconByName(iconToFind, themeObject, ICONSIZE)
     if pathToIcon:
