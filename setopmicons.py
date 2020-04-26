@@ -104,7 +104,12 @@ def iconByName(iconName, themeObject, ICONSIZE = 32, QUESTION = True):
         pathToIcon = iconInfoObject.get_filename()
 
     else:
-        pathToIcon = ''
+
+        if iconInfoObject:
+            pathToIcon = iconInfoObject.get_filename()
+        else:
+            pathToIcon = ''
+
     return pathToIcon
 
 def findAnIcon(item, themeObject, ICONSIZE=32):
