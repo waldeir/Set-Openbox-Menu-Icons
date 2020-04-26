@@ -69,39 +69,42 @@ def iconByLabel(item, themeObject, ICONSIZE = 32):
         return ''
 
 
-def iconByName(iconName, themeObject, ICONSIZE = 32):
+def iconByName(iconName, themeObject, ICONSIZE = 32, QUESTION = True):
     """Fetch a icon path by its name"""
 
     #Create an object with the iformation of the icon found
     iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
                 Gtk.IconLookupFlags.FORCE_SVG)
 
-    #If the path is empty, ask what to do
-    while not iconInfoObject:
-        print ("Atention: Icon \"", iconName, "\" was not found.", sep = '')
-        answer = input("Do you want to try another name? (y/N) ")
-        if answer.lower() == 'y' or answer.lower() == 'yes':
-            print("Enter the new iconName:")
-            iconName = input("iconName = ")
-            print("")
+    if QUESTION == True:
+        #If the path is empty, ask what to do
+        while not iconInfoObject:
+            print ("Atention: Icon \"", iconName, "\" was not found.", sep = '')
+            answer = input("Do you want to try another name? (y/N) ")
+            if answer.lower() == 'y' or answer.lower() == 'yes':
+                print("Enter the new iconName:")
+                iconName = input("iconName = ")
+                print("")
 
-            if ' ' in iconName:
-                iconName = removeSpaceWarning(iconName)
+                if ' ' in iconName:
+                    iconName = removeSpaceWarning(iconName)
 
-        elif answer.lower() == "n" or answer.lower() == "no" or answer == '':
-            pathToIcon = ''
-            print("")
-            return pathToIcon
+            elif answer.lower() == "n" or answer.lower() == "no" or answer == '':
+                pathToIcon = ''
+                print("")
+                return pathToIcon
 
-        else:
-            print("The option \"", answer, "\" is invalid\n", sep = '')
-            continue
-                #Create an object with the iformation of the looked icon.
-        iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
-                Gtk.IconLookupFlags.FORCE_SVG)
+            else:
+                print("The option \"", answer, "\" is invalid\n", sep = '')
+                continue
+            #Create an object with the iformation of the looked icon.
+            iconInfoObject = themeObject.lookup_icon(iconName, ICONSIZE,
+                    Gtk.IconLookupFlags.FORCE_SVG)
         #Obtaining the path for the icon
-    pathToIcon = iconInfoObject.get_filename()
+        pathToIcon = iconInfoObject.get_filename()
 
+    else:
+        pathToIcon = ''
     return pathToIcon
 
 def findAnIcon(item, themeObject, ICONSIZE=32):
