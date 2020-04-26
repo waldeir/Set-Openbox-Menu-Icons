@@ -32,15 +32,18 @@ ET.register_namespace('xsi', "http://www.w3.org/2001/XMLSchema-instance")
 ICONSIZE = 48
 
 
-themeObject = Gtk.IconTheme.get_default() #Getting the current theme to extract
-#the icons path
+themeObject = Gtk.IconTheme.get_default() # Getting the current theme to extract
+# the icons path
 menupath = os.path.expanduser('~/.config/openbox/menu.xml')
-tree = ET.parse(menupath) #The menu file target
+tree = ET.parse(menupath) # The menu file target
 root = tree.getroot()
 
 
 parser = argparse.ArgumentParser(description='It sets icons to the openbox menu.')
 args = parser.parse_args()
+
+
+
 
 def iconByOldName(item, themeObject, ICONSIZE = 32):
     """verify if the current theme has an icon with the previous theme icon name"""
