@@ -4,11 +4,15 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import xml.etree.ElementTree as ET
-
-import argparse
 import os
 
+import argparse
 from xdg.DesktopEntry import DesktopEntry
+
+parser = argparse.ArgumentParser(description='Program to set icons to your custom openbox menu')
+parser.add_argument('-d', action='store_true', help="Erase current icons from menu.xml")
+
+args = parser.parse_args()
 
 # Generation dictionary with executable names and their freedesktop.org .desktop objects 
 
@@ -37,10 +41,6 @@ themeObject = Gtk.IconTheme.get_default() # Getting the current theme to extract
 menupath = os.path.expanduser('~/.config/openbox/menu.xml')
 tree = ET.parse(menupath) # The menu file target
 root = tree.getroot()
-
-
-parser = argparse.ArgumentParser(description='It sets icons to the openbox menu.')
-args = parser.parse_args()
 
 
 
@@ -198,23 +198,29 @@ def iterateRecursively(xmlEtreeElement):
             continue
 
         elif item.tag == '{http://openbox.org/}menu':
+            if args.d == True:
+                item.set('icon', '')
+                continue
+
             pathToIcon = findAnIcon(item, themeObject, ICONSIZE)
             iterateRecursively(item)
+
             if not pathToIcon:
                 continue
             else:
                 item.set('icon', pathToIcon)
-                #item.set('icon', '')
 
         elif item.tag == '{http://openbox.org/}item':
+            if args.d == True:
+                item.set('icon', '')
+                continue
+
             pathToIcon = findAnIcon(item, themeObject, ICONSIZE)
 
             if not pathToIcon:
                 continue
-
             else:
                 item.set('icon', pathToIcon)
-                #item.set('icon', '')
                 
 
         else:
