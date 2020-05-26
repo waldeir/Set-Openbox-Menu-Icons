@@ -5,12 +5,14 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import xml.etree.ElementTree as ET
 import os
+import sys
 
 import argparse
 from xdg.DesktopEntry import DesktopEntry
 
 parser = argparse.ArgumentParser(description='Program to set icons to your custom openbox menu')
 parser.add_argument('-d', action='store_true', help="Erase current icons from menu.xml")
+parser.add_argument('-i', type=str, nargs=1, help="Look for a path to a icon with the provided name", default=None)
 
 args = parser.parse_args()
 
@@ -225,6 +227,12 @@ def iterateRecursively(xmlEtreeElement):
 
         else:
             print("Can't recognize the item.tag = \'", item.tag, "\'", sep = '')
+
+if args.i:
+    pathToIcon = iconByName(args.i[0], themeObject, ICONSIZE)
+    print(pathToIcon)
+    sys.exit()
+
 
 for element in root:
     iterateRecursively(element)
