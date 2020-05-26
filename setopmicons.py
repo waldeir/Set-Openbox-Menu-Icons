@@ -162,7 +162,7 @@ def findAnIcon(item, themeObject, ICONSIZE=32):
     if execute.text in dictionaryDesktop.keys():
         dotDesktop = dictionaryDesktop[execute.text]
         iconToFind = dotDesktop.getIcon()
-        pathToIcon = iconByName(iconToFind, themeObject, ICONSIZE, QUESTION = True)
+        pathToIcon = iconByName(iconToFind, themeObject, ICONSIZE, QUESTION = False)
 
     if pathToIcon:
         return pathToIcon
@@ -204,6 +204,7 @@ def iterateRecursively(xmlEtreeElement):
                 continue
             else:
                 item.set('icon', pathToIcon)
+                #item.set('icon', '')
 
         elif item.tag == '{http://openbox.org/}item':
             pathToIcon = findAnIcon(item, themeObject, ICONSIZE)
@@ -213,6 +214,8 @@ def iterateRecursively(xmlEtreeElement):
 
             else:
                 item.set('icon', pathToIcon)
+                #item.set('icon', '')
+                
 
         else:
             print("Can't recognize the item.tag = \'", item.tag, "\'", sep = '')
