@@ -134,7 +134,7 @@ def iconByName(iconName, themeObject, ICONSIZE = 32, QUESTION = True):
     return pathToIcon
 
 def findAnIcon(item, themeObject, ICONSIZE=32):
-    """Fretch a icon path using different methods"""
+    """Fetch a icon path using different methods"""
     pathToIcon = iconByLabel(item, themeObject, ICONSIZE)
     if pathToIcon:
         return pathToIcon
