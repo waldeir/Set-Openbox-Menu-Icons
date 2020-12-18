@@ -6,6 +6,14 @@ Program to set icons to your custom openbox menu.
 
 ## Usage
 
+
+To show icons next to menu entries, it will be necessary to enabled them in the
+`<menu>` section of the `~/.config/openbox/rc.xml` file with:
+
+```xml
+<showIcons>yes</showIcons>
+```
+
 Download the file and run
 
 ```
