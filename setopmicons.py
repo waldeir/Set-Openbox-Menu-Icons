@@ -237,4 +237,7 @@ if args.i:
 for element in root:
     iterateRecursively(element)
 
-tree.write('/home/terminator/.config/openbox/menu.xml')
+
+homeDir = os.path.expanduser('~')
+
+tree.write(homeDir + '/.config/openbox/menu.xml')
