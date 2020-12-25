@@ -21,7 +21,5 @@ Download the file and run
 ```
 
 It will try to find the icons for each of your menu itens and set them to your
-`menu.xml`. If a particular icon is not found, the script you ask you to enter
+`menu.xml`. If a particular icon is not found, the script will ask to enter
 an alternative icon name to look for.
-
-
