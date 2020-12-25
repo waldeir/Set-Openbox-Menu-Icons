@@ -4,6 +4,15 @@ Program to set icons to your custom openbox menu.
 
 ![](demo.gif)
 
+## Dependencies
+
+You must have `python3`, `gobject` and `pyxdg` installed. In Arch Linux, for example, `python3` is default, so you just need to do
+
+```bash
+# pacman -S python-gobject python-pyxdg
+```
+
+
 ## Usage
 
 
