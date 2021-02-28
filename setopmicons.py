@@ -6,6 +6,7 @@ from gi.repository import Gtk
 import xml.etree.ElementTree as ET
 import os
 import sys
+import pdb
 
 import argparse
 from xdg.DesktopEntry import DesktopEntry
@@ -144,8 +145,12 @@ def findAnIcon(item, themeObject, ICONSIZE=32):
         return pathToIcon
 
     if item.tag == '{http://openbox.org/}menu':
-        pathToIcon = iconByName(item.get('id'), themeObject, ICONSIZE)
-        return pathToIcon 
+        pathToIcon = iconByName(item.get('id'), themeObject, ICONSIZE, QUESTION=False)
+        if not pathToIcon:
+            pathToIcon = iconByName(item.get('label'), themeObject, ICONSIZE)
+            return pathToIcon 
+        else:
+            return pathToIcon
 
     if item[0].get('name').lower() in [ 'reconfigure','restart']:
         pathToIcon = iconByName('view-refresh', themeObject, ICONSIZE)
@@ -191,7 +196,6 @@ def removeSpacesWarning(iconName):
 
 def iterateRecursively(xmlEtreeElement):
     """Iterate through the menu elements recursively and try to find their icons."""
-
     element = xmlEtreeElement
 
     for item in element:
@@ -233,6 +237,18 @@ if args.i:
     print(pathToIcon)
     sys.exit()
 
+## Set labels to the submenus if they do not have ##
+menuLabels={}
+for element in root:
+    menuLabels[element.get('id')] = element.get('label')
+
+for element in root:
+    if element.get('id') == 'root-menu':
+        for item in element:
+            if item.tag == '{http://openbox.org/}menu':
+                itemId = item.get('id')
+                item.set('label',menuLabels[itemId])
+##########################################################
 
 for element in root:
     iterateRecursively(element)
