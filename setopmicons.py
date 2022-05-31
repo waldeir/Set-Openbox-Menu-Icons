@@ -6,7 +6,6 @@ from gi.repository import Gtk
 import xml.etree.ElementTree as ET
 import os
 import sys
-import pdb
 
 import argparse
 from xdg.DesktopEntry import DesktopEntry
