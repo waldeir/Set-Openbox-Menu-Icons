@@ -26,7 +26,10 @@ for archive in dotDesktopFiles:
     if archive.split('.')[-1] != 'desktop' : # Exclude non .desktop files
         continue
     dotDesktopObject = DesktopEntry()
-    dotDesktopObject.parse('/usr/share/applications/' + archive)
+    try:
+        dotDesktopObject.parse('/usr/share/applications/' + archive)
+    except:
+        continue
     executable = dotDesktopObject.getExec().split(' ')[0]
     dictionaryDesktop[executable] = dotDesktopObject
 
